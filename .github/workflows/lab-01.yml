@@ -1,35 +1,35 @@
-name: Hello GitHub Actions
+name: Schedule Trigger Workflow
 
+# Executa em horários programados (cron)
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  schedule:
+    # Executa todo dia às 9:00 UTC (6:00 Brasília)
+    - cron: '0 9 * * *'
+    # Executa toda segunda-feira às 14:00 UTC (11:00 Brasília)
+    - cron: '0 14 * * 1'
+  
+  # Permite execução manual para testes
   workflow_dispatch:
 
 jobs:
-  hello-job:
+  scheduled-job:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout código
       uses: actions/checkout@v4
     
-    - name: Executar Hello World
-      run: echo "Hello, GitHub Actions!"
-    
-    - name: Mostrar informações do sistema
+    - name: Informações do Schedule
       run: |
-        echo "Sistema Operacional: ${{ runner.os }}"
-        echo "Diretório atual: $(pwd)"
+        echo "Workflow disparado por SCHEDULE"
         echo "Data atual: $(date)"
-        echo "Usuário: $(whoami)"
+        echo "Hora UTC: $(date -u)"
+        echo "Timezone: $(date +%Z)"
     
-    - name: Listar arquivos do repositório
-      run: ls -la
-    
-    - name: Comandos múltiplos
+    - name: Relatório diário automatizado
       run: |
-        echo "Este é o Lab 01 do curso de GitHub Actions"
-        echo "Workflow executado com sucesso!"
-        echo "Pronto para próximos desafios!"
+        echo "RELATÓRIO DIÁRIO AUTOMATIZADO"
+        echo "================================"
+        echo "Total de commits: $(git rev-list --all --count)"
+        echo "Contribuidores únicos: $(git shortlog -sn | wc -l)"
+        echo "Último commit: $(git log -1 --pretty=format:'%h - %s (%an, %ar)')"
