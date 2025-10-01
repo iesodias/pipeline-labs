@@ -1,8 +1,7 @@
-name: Schedule Trigger Workflow
-
-# Executa em horários programados (cron)
 on:
   schedule:
+    # Executa às 18:42 Brasília (21:42 UTC)
+    - cron: '42 21 * * *'
     # Executa todo dia às 9:00 UTC (6:00 Brasília)
     - cron: '0 9 * * *'
     # Executa toda segunda-feira às 14:00 UTC (11:00 Brasília)
