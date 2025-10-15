@@ -1,105 +1,40 @@
-name: Steps Condicionais
+name: "Estrutura de Diretórios e Arquivos"
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
-    inputs:
-      run_tests:
-        description: 'Executar testes?'
-        required: false
-        default: true
-        type: boolean
-      deploy_environment:
-        description: 'Ambiente para deploy'
-        required: false
-        default: 'none'
-        type: choice
-        options:
-        - none
-        - development
-        - staging
-        - production
+
+env:
+  NODE_VERSION: '18'
 
 jobs:
-  conditional-steps:
+  demonstrar-estrutura:
+    name: "Demonstrar Estrutura Básica"
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout código
-      uses: actions/checkout@v4
-    
-    - name: Step sempre executado
-      run: |
-        echo "Este step sempre executa"
-        echo "Evento: ${{ github.event_name }}"
-        echo "Branch: ${{ github.ref_name }}"
-    
-    - name: Step apenas em push
-      if: github.event_name == 'push'
-      run: |
-        echo "Este step executa apenas em PUSH"
-        echo "Commit: ${{ github.sha }}"
-    
-    - name: Step apenas em PR
-      if: github.event_name == 'pull_request'
-      run: |
-        echo "Este step executa apenas em PULL REQUEST"
-        echo "PR #${{ github.event.number }}"
-    
-    - name: Step apenas na main
-      if: github.ref == 'refs/heads/main'
-      run: |
-        echo "Este step executa apenas na branch MAIN"
-    
-    - name: Executar testes (input manual)
-      if: github.event.inputs.run_tests == 'true' || github.event_name != 'workflow_dispatch'
-      run: |
-        echo "Executando testes..."
-        sleep 2
-        echo "Testes concluídos"
-    
-    - name: Deploy para Development
-      if: github.event.inputs.deploy_environment == 'development'
-      run: |
-        echo "Deploy para DEVELOPMENT"
-        sleep 1
-        echo "Deploy concluído"
-    
-    - name: Deploy para Staging
-      if: github.event.inputs.deploy_environment == 'staging'
-      run: |
-        echo "Deploy para STAGING"
-        sleep 2
-        echo "Deploy concluído"
-    
-    - name: Deploy para Production
-      if: github.event.inputs.deploy_environment == 'production'
-      run: |
-        echo "Deploy para PRODUCTION"
-        echo "Aguardando aprovação manual..."
-        sleep 3
-        echo "Deploy concluído"
-    
-    - name: Step com múltiplas condições
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
-      run: |
-        echo "Push na main com sucesso nos steps anteriores"
-    
-    - name: Step que executa mesmo com falha
-      if: always()
-      run: |
-        echo "Este step sempre executa, mesmo se houver falhas"
-        echo "Status dos jobs anteriores: ${{ job.status }}"
-    
-    - name: Step apenas se houver falha
-      if: failure()
-      run: |
-        echo "Este step executa apenas se houver falha"
-    
-    - name: Cleanup
-      if: always()
-      run: |
-        echo "Limpeza final sempre executada"
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      
+      - name: Mostrar estrutura .github/workflows
+        run: |
+          echo "=== ESTRUTURA DO DIRETÓRIO .github/workflows ==="
+          ls -la .github/workflows/
+          echo ""
+          echo "Total de workflows: $(ls -1 .github/workflows/*.y*ml 2>/dev/null | wc -l)"
+      
+      - name: Elementos obrigatórios do workflow
+        run: |
+          echo "=== ELEMENTOS OBRIGATÓRIOS ==="
+          echo "1. name: Nome do workflow"
+          echo "2. on: Eventos de trigger (push, workflow_dispatch)"
+          echo "3. jobs: Tarefas a executar"
+      
+      - name: Variáveis e contextos
+        run: |
+          echo "=== VARIÁVEIS E CONTEXTOS ==="
+          echo "Variável env: ${{ env.NODE_VERSION }}"
+          echo "Repositório: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Actor: ${{ github.actor }}"
