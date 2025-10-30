@@ -1,0 +1,14 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "demo",
+      "severity": "error",
+      "pattern": [
+        {
+          "regexp": "ERROR:(.*)",
+          "message": 1
+        }
+      ]
+    }
+  ]
+}
