@@ -21,8 +21,7 @@ jobs:
           echo "- Status esperado: OK" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Registrar problem matcher simples (conceitual)
-        run: |
-          echo "::add-matcher::{\"problemMatcher\":[{\"owner\":\"demo\",\"pattern\":[{\"regexp\":\"ERROR:(.*)\"}]}]}"
+        run: echo "::add-matcher::.github/problem-matchers/demo.json"
 
       - name: Emitir mensagem que casa com o matcher
         run: |
@@ -36,6 +35,10 @@ jobs:
           echo "::endgroup::"
           echo "::warning title=Aviso::Exemplo de aviso padronizado"
           echo "::error title=Erro::Exemplo de erro padronizado"
+
+      - name: Remover problem matcher (limpeza)
+        if: always()
+        run: echo "::remove-matcher owner=demo"
 
       - name: Finalização
         run: echo "Pipeline executado com sucesso (verifique anotações e resumo)."
