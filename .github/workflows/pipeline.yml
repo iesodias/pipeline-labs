@@ -266,7 +266,7 @@ jobs:
           timeout 60 bash -c 'until curl -f http://localhost:8000/api/health; do sleep 2; done'
 
           # Run basic load test
-          locust -f . \
+          locust -f .github/workflows/locustfile.py \
             --host http://localhost:8000 \
             --users 50 \
             --spawn-rate 5 \
